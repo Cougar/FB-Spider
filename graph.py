@@ -3,6 +3,11 @@ import json
 from json2html import *
 import webbrowser
 
+try:
+    raw_input
+except NameError:
+    raw_input = input
+
 graph= GraphAPI('YOUR_ACCESS_TOKEN')
 
 print("Please enter the page-name:" )
@@ -12,7 +17,7 @@ search_res=graph.get('search?q='+PageName+'&type=page&limit=5')
 
 for index,item in enumerate(search_res['data']):
     #The 'data' key of 'search_res' dictionary is a list of dictionaries of 5 pages
-    print index+1,item['name']
+    print("{} {}".format(index+1,item['name']))
     
 pno=int(raw_input("Please enter the page no. : "))
 pid=search_res['data'][pno-1]['id']        
@@ -47,17 +52,19 @@ for i in range(0,len(variable['data'])):
 		variable['data'][i]['comments']=variable['data'][i]['comments']['data']
 	except:pass
 variable['']=variable.pop('data')
+#Removing 'headers'
+variable.pop('headers')
 
 
 with open('data.json', 'wb') as outfile:
-    json.dump(variable, outfile)
+    json.dumps(variable, outfile)
 
 #infoFromJson = json.loads(variable)
-table = json2html.convert(json = variable)
+table = json2html.convert(json = variable, escape=False)
 
 htmlfile=table.encode('utf-8')
 #print(htmlfile)
-f = open('Table.html','w')
+f = open('Table.html','wb')
 f.write(htmlfile)
 f.close()
 
