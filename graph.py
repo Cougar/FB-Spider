@@ -53,7 +53,7 @@ with open('data.json', 'wb') as outfile:
     json.dump(variable, outfile)
 
 #infoFromJson = json.loads(variable)
-table = json2html.convert(json = variable)
+table = json2html.convert(json = variable, escape=False)
 
 htmlfile=table.encode('utf-8')
 #print(htmlfile)
